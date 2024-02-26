@@ -3,18 +3,18 @@ import pathlib
 
 
 # %%
-path_to_dsg = "~/uh2_office_dsg.json"
+path_to_dsg = "./DSGs/uhumans2/backend/dsg.json"
 path_to_dsg = pathlib.Path(path_to_dsg).expanduser().absolute()
 
 
 # %%
 G = dsg.DynamicSceneGraph.load(str(path_to_dsg))
 
-
 # %%
-fig = dsg.plot_scene_graph(G, marker_size=6)
+fig = dsg.plot_scene_graph(G)
 if fig is not None:
-    fig.show(renderer="notebook")
+    # fig.show(renderer="notebook")
+    fig.show()
 
 
 # %% [markdown]
