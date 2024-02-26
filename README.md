@@ -1,2 +1,2 @@
 # SG-Plan
-AA275 fina project repository.
+AA275 final project repository.
