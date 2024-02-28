@@ -1,6 +1,6 @@
+# %%
 import spark_dsg as dsg
 import pathlib
-
 
 # %%
 path_to_dsg = "./DSGs/uhumans2/backend/dsg.json"
@@ -11,9 +11,14 @@ path_to_dsg = pathlib.Path(path_to_dsg).expanduser().absolute()
 G = dsg.DynamicSceneGraph.load(str(path_to_dsg))
 
 # %%
-fig = dsg.plot_scene_graph(G)
+layer_settings = {}
+for layer_idx, layer in enumerate(G.layers):
+    if layer_idx == 1:
+            layer_settings[layer.id] = {'marker_size': 2, 'annotation_size': 25, 'include_text': True}
+    else:
+        layer_settings[layer.id] = {'marker_size': 6+layer_idx, 'annotation_size': 25, 'include_text': True}
+fig = dsg.plot_scene_graph(G, title="Test DSG", figure_path="plots/test_dsg.html", layer_settings=layer_settings)
 if fig is not None:
-    # fig.show(renderer="notebook")
     fig.show()
 
 
