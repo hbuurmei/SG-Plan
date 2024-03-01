@@ -82,9 +82,21 @@ print("")
 
 # %%
 layer_edge_counts = {}
+places = set() # MP test
+places_in_multi_rooms = set() # MP test
 for edge in G.interlayer_edges:
+
     source_layer = G.get_node(edge.source).layer
     target_layer = G.get_node(edge.target).layer
+
+    # MP test
+    if source_layer == 4:
+        target_id = G.get_node(edge.target).id
+        if id in places:
+            places_in_multi_rooms.add(target_id)
+        places.add(target_id)
+    # MP test
+
     if source_layer not in layer_edge_counts:
         layer_edge_counts[source_layer] = {}
     if target_layer not in layer_edge_counts[source_layer]:
@@ -95,6 +107,8 @@ for edge in G.interlayer_edges:
 print("Interlayer Edges:")
 for source_layer in layer_edge_counts:
     print(f"  - {source_layer} -> {layer_edge_counts[source_layer]}")
+print(f"Places in Multiple Rooms: {places_in_multi_rooms}") # MP test
+print(f"Total places count: {len(places)}") # MP test
 print("")
 
 
