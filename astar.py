@@ -99,7 +99,7 @@ def naive_place_to_room_astar(G, start_node, goal_room, heuristic):
     return path_list, cost_to_come[curr_node]
 
 
-def hierarchical_planner(G, start_node, goal_node):
+def hierarchical_planner(G, start_node, goal_node, heuristic):
     # convert input from node.id.value to node
     if isinstance(start_node, int):
         start_node = G.get_node(start_node)
@@ -114,13 +114,13 @@ def hierarchical_planner(G, start_node, goal_node):
     # Room level planning
     start_room = G.get_node(start_node.get_parent())
     goal_room = G.get_node(goal_node.get_parent())
-    room_path, _ = layer_astar(G, start_room, goal_room, node_dist)
+    room_path, _ = layer_astar(G, start_room, goal_room, heuristic)
     # Room to Room planning
     total_path_list = [start_node]
     total_cost = 0.
     for i in range(len(room_path) - 1):
         curr_node = total_path_list.pop()
-        path_segment, segment_cost = naive_place_to_room_astar(G, curr_node, room_path[i + 1], node_dist)
+        path_segment, segment_cost = naive_place_to_room_astar(G, curr_node, room_path[i + 1], heuristic)
         total_path_list.extend(path_segment)
         total_cost += segment_cost
     return total_path_list, total_cost
@@ -180,7 +180,7 @@ if __name__ == "__main__":
     place2 = G.get_node(list(room_nodes[8].children())[10])
     print(place1, place2)
     time1 = time.time()
-    path_list, total_cost = hierarchical_planner(G, place1, place2)
+    path_list, total_cost = hierarchical_planner(G, place1, place2, node_dist)
     time2 = time.time()
     print(f"Compute time: {time2 - time1} sec")
     print(path_list)
