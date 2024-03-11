@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from typing import Any
 from queue import PriorityQueue
 
+
 @dataclass(order=True)
 class PrioritizedNode:
     # data wrapper class so that the nodes don't get compared
@@ -17,7 +18,7 @@ def bad_heuristic(node1, node2):
     return 0. 
 
 def node_dist(node1, node2):
-    return np.linalg.norm(node1.attributes.position - node2.attributes.position, ord=2)
+    return np.linalg.norm(node1.attributes.position[:2] - node2.attributes.position[:2], ord=2)
 
 def get_info(goal_node, path_dict, cost_to_come):
     # returns usable information from dictionary
@@ -150,65 +151,3 @@ def hierarchical_planner(G, start_node, goal_node, heuristic):
         total_path_list.extend(path_segment)
         total_cost += segment_cost
     return total_path_list, total_cost
-
-if __name__ == "__main__":
-    path_to_dsg = "./DSGs/uhumans2/backend/dsg.json"
-    path_to_dsg = pathlib.Path(path_to_dsg).expanduser().absolute()
-
-    # node data structure: Node<id=node.id.category(node.id.category_id), layer=node.layer>
-    # node.id.value: the long number
-
-    G = dsg.DynamicSceneGraph.load(str(path_to_dsg))
-    dsg.add_bounding_boxes_to_layer(G, dsg.DsgLayers.ROOMS)
-
-    # print("Testing Room layer A*")
-    # room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
-    # room_nodes = list(room_layer.nodes)
-    # time1 = time.time()
-    # path_list, total_cost = layer_astar(G, room_nodes[1], room_nodes[3], node_dist)
-    # time2 = time.time()
-    # print(f"Compute time: {time2 - time1} sec")
-    # print(path_list)
-    # print(total_cost)
-    # print()
-
-    print("Testing Place layer A*")
-    room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
-    room_nodes = list(room_layer.nodes)
-    place1 = G.get_node(list(room_nodes[3].children())[0])
-    place2 = G.get_node(list(room_nodes[8].children())[10])
-    print(place1, place2)
-    time1 = time.time()
-    path_list, total_cost = get_info(*layer_astar(G, place1, place2, node_dist))
-    time2 = time.time()
-    print(f"Compute time: {time2 - time1} sec")
-    print(path_list)
-    print(total_cost)
-    print()
-
-    # print("Testing naive place to room A*")
-    # room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
-    # room_nodes = list(room_layer.nodes)
-    # place1 = G.get_node(list(room_nodes[3].children())[0])
-    # place2 = G.get_node(list(room_nodes[8].children())[10])
-    # time1 = time.time()
-    # path_list, total_cost = get_info(*naive_place_to_room_astar(G, place1, room_nodes[8], node_dist))
-    # time2 = time.time()
-    # print(f"Compute time: {time2 - time1} sec")
-    # print(path_list)
-    # print(total_cost)
-    # print()
-
-    print("Testing hierarchical planner")
-    room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
-    room_nodes = list(room_layer.nodes)
-    place1 = G.get_node(list(room_nodes[3].children())[0])
-    place2 = G.get_node(list(room_nodes[8].children())[10])
-    print(place1, place2)
-    time1 = time.time()
-    path_list, total_cost = hierarchical_planner(G, place1, place2, node_dist)
-    time2 = time.time()
-    print(f"Compute time: {time2 - time1} sec")
-    print(path_list)
-    print(total_cost)
-    print()
