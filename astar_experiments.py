@@ -14,36 +14,33 @@ path_to_dsg = pathlib.Path(path_to_dsg).expanduser().absolute()
 G = dsg.DynamicSceneGraph.load(str(path_to_dsg))
 dsg.add_bounding_boxes_to_layer(G, dsg.DsgLayers.ROOMS)
 
-print("--- Testing place layer A* ---")
+# Select start and end nodes
 room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
 room_nodes = list(room_layer.nodes)
-place1 = G.get_node(list(room_nodes[3].children())[0])
-place2 = G.get_node(list(room_nodes[8].children())[10])
+# start_place = G.get_node(list(room_nodes[3].children())[0])
+start_place = G.get_node(list(room_nodes[2].children())[0])
+end_place = G.get_node(list(room_nodes[8].children())[10])
+print(f"Start: {start_place}")
+print(f"End: {end_place}")
+
+print("--- Testing place layer A* ---")
 time1 = time.time()
-path_list_layer, total_cost = get_info(*layer_astar(G, place1, place2, node_dist))
+path_list_layer, total_cost = get_info(*layer_astar(G, start_place, end_place, node_dist))
 time2 = time.time()
-print(f"Start: {place1}")
-print(f"End: {place2}")
 print(f"Compute time: {(time2 - time1):.5f} sec")
 print(f"Cost: {total_cost:.3f} \n")
 
 print("--- Testing hierarchical planner A* ---")
-room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
-room_nodes = list(room_layer.nodes)
-place1 = G.get_node(list(room_nodes[3].children())[0])
-place2 = G.get_node(list(room_nodes[8].children())[10])
 time1 = time.time()
-path_list_hierarchical, total_cost = hierarchical_planner(G, place1, place2, node_dist)
+path_list_hierarchical, total_cost = hierarchical_planner(G, start_place, end_place, node_dist)
 time2 = time.time()
-print(f"Start: {place1}")
-print(f"End: {place2}")
 print(f"Compute time: {(time2 - time1):.5f} sec")
 print(f"Cost: {total_cost:.3f} \n")
 
 # Plot the two paths on top of the DSG in 2D
 print("--- Plotting paths ---")
-start_pos = place1.attributes.position
-end_pos = place2.attributes.position
+start_pos = start_place.attributes.position
+end_pos = end_place.attributes.position
 places_layer = G.get_layer(dsg.DsgLayers.PLACES)
 plt.figure(figsize=(8, 8))
 
@@ -96,7 +93,7 @@ plt.plot(end_pos[0], end_pos[1], 'D', color='black', markersize=5, label='End po
 
 plt.xlabel("x [m]")
 plt.ylabel("y [m]")
-plt.title("Layer A* vs. Hierarchical A* Path Comparison")
+plt.title("Place Layer A* vs. Hierarchical A* Path Comparison")
 plt.legend()
 plt.gca().set_aspect('equal', adjustable='box')  # ensure physical aspect ratio is maintained
 plt.savefig("plots/astar_experiment.png")
