@@ -49,11 +49,12 @@ print(f"Unique object list: {objects_unique}")
 print(f"Their counts: {counts}")
 
 
-target_object = "couch"
+target_object = "trashcan"
 
 room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
 room_nodes = list(room_layer.nodes)
-place1 = G.get_node(list(room_nodes[8].children())[0])
+# place1 = G.get_node(list(room_nodes[8].children())[0])
+place1 = G.get_node(list(room_nodes[0].children())[20])
 
 print("Testing object navigation (hierarchical_planner)")
 time1 = time.time()
@@ -119,4 +120,4 @@ plt.ylabel("y [m]")
 # plt.title("Hierarchical A* Path to Object")
 plt.legend()
 plt.gca().set_aspect('equal', adjustable='box')  # ensure physical aspect ratio is maintained
-plt.savefig("plots/astar_object.png")
+plt.savefig("plots/astar_trashcan.png")
