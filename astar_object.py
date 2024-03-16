@@ -42,12 +42,13 @@ dsg.add_bounding_boxes_to_layer(G, dsg.DsgLayers.ROOMS)
 
 object_layer = G.get_layer(dsg.DsgLayers.OBJECTS)
 object_nodes = list(object_layer.nodes)
-for obj in object_nodes:
-    print(obj.attributes.name)
+# for obj in object_nodes:
+#     print(obj.attributes.name)
+objects_unique, counts = np.unique([obj.attributes.name for obj in object_nodes], return_counts=True)
+print(f"Unique object list: {objects_unique}")
+print(f"Their counts: {counts}")
 
-# print("Testing object navigation (layer A*)")
-objects = ["fan_papers_keyboard_laptop_mouse", "trashcan", "chair", "plant", "painting", "couch"]
-print(f"Choose object from {objects}")
+
 target_object = "couch"
 
 room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
@@ -115,7 +116,7 @@ for obj in object_nodes:
 
 plt.xlabel("x [m]")
 plt.ylabel("y [m]")
-plt.title("Hierarchical A* Path to Object")
+# plt.title("Hierarchical A* Path to Object")
 plt.legend()
 plt.gca().set_aspect('equal', adjustable='box')  # ensure physical aspect ratio is maintained
 plt.savefig("plots/astar_object.png")
