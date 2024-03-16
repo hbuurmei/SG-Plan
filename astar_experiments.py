@@ -19,7 +19,7 @@ room_layer = G.get_layer(dsg.DsgLayers.ROOMS)
 room_nodes = list(room_layer.nodes)
 # start_place = G.get_node(list(room_nodes[3].children())[0])
 start_place = G.get_node(list(room_nodes[2].children())[0])
-end_place = G.get_node(list(room_nodes[8].children())[10])
+end_place = G.get_node(list(room_nodes[8].children())[0])
 print(f"Start: {start_place}")
 print(f"End: {end_place}")
 
@@ -77,7 +77,7 @@ for i in range(len(path_list_layer) - 1):
     # Plot the edges in the path
     start = path_list_layer[i].attributes.position
     end = path_list_layer[i + 1].attributes.position
-    plt.plot([start[0], end[0]], [start[1], end[1]], color="red", linewidth=2, label="Layer A* Path" if i == 0 else "")
+    plt.plot([start[0], end[0]], [start[1], end[1]], color="red", linewidth=2, label="Place Layer A* Path" if i == 0 else "")
 
 for node in path_list_hierarchical:
     # Plot the nodes in the path
@@ -93,7 +93,7 @@ plt.plot(end_pos[0], end_pos[1], 'D', color='black', markersize=5, label='End po
 
 plt.xlabel("x [m]")
 plt.ylabel("y [m]")
-plt.title("Place Layer A* vs. Hierarchical A* Path Comparison")
+# plt.title("Place Layer A* vs. Hierarchical A* Path Comparison")
 plt.legend()
 plt.gca().set_aspect('equal', adjustable='box')  # ensure physical aspect ratio is maintained
 plt.savefig("plots/astar_experiment.png")
