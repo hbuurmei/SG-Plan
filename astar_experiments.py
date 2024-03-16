@@ -96,4 +96,5 @@ plt.ylabel("y [m]")
 # plt.title("Place Layer A* vs. Hierarchical A* Path Comparison")
 plt.legend()
 plt.gca().set_aspect('equal', adjustable='box')  # ensure physical aspect ratio is maintained
+plt.tight_layout()
 plt.savefig("plots/astar_experiment.png")
